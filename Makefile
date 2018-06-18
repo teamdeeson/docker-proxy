@@ -3,3 +3,6 @@ start:
 
 stop:
 	./stop.sh
+
+view-logs:
+	./logs.sh
