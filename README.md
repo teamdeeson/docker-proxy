@@ -6,10 +6,10 @@ Provides a Traefik proxy that is independent of docker4drupal.
 
 ## Installation
 
-Clone this repository locally to your machine.
-Navigate into the cloned respository and run start.sh
-To stop run stop.sh
-To see the Traefik logs run logs.sh
+1. Clone this repository locally to your machine.
+2. Navigate into the cloned respository and run `make start`
+3. To stop run `make stop`
+4. To see the Traefik logs run logs.sh
 
 When Traefik is running you can access its dashboard at [https://monitor.localhost](https://monitor.localhost)
 
