@@ -9,5 +9,7 @@ fi
 
 ./genlocalcrt.sh ./.certs
 
-docker network create proxy
+if [ -z "$(docker network ls | fgrep -i proxy)" ]; then
+  docker network create proxy
+fi
 docker-compose up -d
