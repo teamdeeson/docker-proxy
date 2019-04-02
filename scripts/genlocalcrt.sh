@@ -5,7 +5,7 @@ openssl=`which openssl`
 openssldir=`${openssl} version -a | grep OPENSSLDIR |  awk '{gsub(/"/, "",  $2); print $2}'`
 opensslconf="${openssldir:-/System/Library/OpenSSL}/openssl.cnf"
 
-if [ -f ${dir}/local.key ] && [ -f ${dir}/local.crt ] ; then
+if [ -f "${dir}/local.key" ] && [ -f "${dir}/local.crt" ] ; then
   echo 'Certificate exists'
   exit
 fi

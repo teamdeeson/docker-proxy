@@ -1,8 +1,16 @@
+default: start
+
 start:
-	./start.sh
+	./scripts/start.sh
 
 stop:
-	./stop.sh
+	./scripts/stop.sh
+
+status:
+	./scripts/status.sh
+
+status-watch:
+	watch -n 300 ./scripts/status.sh
 
 view-logs:
-	./logs.sh
+	./scripts/logs.sh
