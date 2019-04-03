@@ -53,7 +53,7 @@ $openssl req \
     -sha256 \
     -days 3650 \
     -newkey rsa:2048 \
-    -keyout "${local_cert}" \
-    -out "${local_key}" \
+    -keyout "${local_key}" \
+    -out "${local_cert}" \
     -config <(cat "${cert_dir}/cert.cnf" \
       <(cat "${cert_dir}/cert.cnf.dns"))
