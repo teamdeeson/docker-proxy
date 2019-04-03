@@ -18,6 +18,20 @@ services:
       - 'traefik.frontend.rule=Host:monitor.${BASE_DOMAIN}'
       - 'traefik.port=8080'
 
+  portainer:
+    depends_on:
+      - traefik
+    image: portainer/portainer
+    container_name: "${NAME}_portainer"
+    command: --no-auth -H unix:///var/run/docker.sock
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - proxy
+    labels:
+      - 'traefik.port=9000'
+      - 'traefik.frontend.rule=Host:portainer.${BASE_DOMAIN}'
+
 networks:
   proxy:
     external: true
