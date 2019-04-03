@@ -3,7 +3,7 @@ version: '3'
 services:
   traefik:
     image: traefik:1.6.6-alpine
-    container_name: traefik
+    container_name: "${NAME}_traefik"
     command: --docker
     ports:
       - '80:80'
@@ -15,9 +15,9 @@ services:
     networks:
       - proxy
     labels:
-      - 'traefik.frontend.rule=Host:monitor.localhost'
+      - 'traefik.frontend.rule=Host:monitor.${BASE_DOMAIN}'
       - 'traefik.port=8080'
 
 networks:
   proxy:
-    external: true    
+    external: true
