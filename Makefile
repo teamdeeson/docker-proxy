@@ -1,5 +1,8 @@
 default: start
 
+certificate:
+	./scripts/genlocalcrt.sh clean
+
 start:
 	./scripts/start.sh
 

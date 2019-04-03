@@ -1,25 +1,59 @@
 #!/usr/bin/env bash
 
-dir=${1-.}
-openssl=`which openssl`
-openssldir=`${openssl} version -a | grep OPENSSLDIR |  awk '{gsub(/"/, "",  $2); print $2}'`
-opensslconf="${openssldir:-/System/Library/OpenSSL}/openssl.cnf"
+set -e
 
-if [ -f "${dir}/local.key" ] && [ -f "${dir}/local.crt" ] ; then
+script_path=$(dirname $0)
+working_dir=$(pwd)
+cd "$script_path/.."
+repo_root=$(pwd)
+
+clean=0
+if [ "$1" == "clean" ]; then
+  clean=1
+fi
+
+defaults="${script_path}/defaults"
+cert_dir=.certs
+if [ ! -e "${cert_dir}" ]; then
+  mkdir -p "${cert_dir}"
+fi
+
+if [ ! -f "${cert_dir}/cert.cnf" ]; then
+  cp "${defaults}/cert.cnf" "${cert_dir}/cert.cnf"
+fi
+
+if [ ! -f "${cert_dir}/cert.cnf.dns" ]; then
+  cp "${defaults}/cert.cnf.dns" "${cert_dir}/cert.cnf.dns"
+fi
+
+local_cert="${cert_dir}/local.crt"
+local_key="${cert_dir}/local.key"
+
+if [ "${clean}" -eq 1 ]; then
+  if [ -f "${local_cert}" ]; then
+    unlink "${local_cert}"
+  fi
+  if [ -f "${local_key}" ]; then
+    unlink "${local_key}"
+  fi
+fi
+
+if [ -f "${local_cert}" ] && [ -f "${local_key}" ] ; then
   echo 'Certificate exists'
   exit
 fi
 
-$openssl req -new \
-  -x509 \
-  -nodes \
-  -sha1 \
-  -days 3650 \
-  -newkey rsa:2048 \
-  -keyout ${dir}/local.key \
-  -out ${dir}/local.crt \
-  -subj "/C=GB/ST=Local/L=Local/O=Local/CN=localhost" \
-  -reqexts SAN \
-  -extensions SAN \
-  -config <(cat ${opensslconf} \
-    <(printf '[SAN]\nsubjectAltName=DNS:localhost,DNS:*.localhost,DNS:docker.local'))
+# Generate a self-signed certificate if one is missing.
+# Certificate generation steps from https://somoit.net/security/security-create-self-signed-san-certificate-openssl.
+openssl=`which openssl`
+$openssl req \
+    -new \
+    -x509 \
+    -nodes \
+    -sha256 \
+    -days 3650 \
+    -newkey rsa:2048 \
+    -keyout "${local_cert}" \
+    -out "${local_key}" \
+    -config <(cat "${cert_dir}/cert.cnf" \
+      <(cat "${cert_dir}/cert.cnf.dns"))
