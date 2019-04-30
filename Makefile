@@ -6,3 +6,6 @@ stop:
 
 view-logs:
 	./logs.sh
+
+getip:
+	@./getip.sh
