@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Provides a Traefik proxy that is independent of docker4drupal.
+Provides a Traefik proxy that is independent of docker4drupal. This allows a web developer to have several projects running at the same time.
 
 ## Installation
 
